@@ -67,6 +67,7 @@ impl From<ChartResolution> for ResolutionKind {
             ChartResolution::Week => ResolutionKind::Week,
             ChartResolution::Month => ResolutionKind::Month,
             ChartResolution::Year => ResolutionKind::Year,
+            _ => todo!(),
         }
     }
 }

@@ -9,6 +9,8 @@ pub(crate) mod utils;
 
 #[cfg(any(feature = "test-utils", test))]
 pub mod tests;
+pub mod copy;
+pub mod new;
 
 pub use entity;
 pub use migration;

@@ -6,6 +6,7 @@ members = [
     "blockscout-db",
     "endpoints/swagger",
     "blockscout-service-launcher",
+    "blockscout-service-launcher-2",
     "display-bytes",
     "env-collector",
     "metrics-tools",
