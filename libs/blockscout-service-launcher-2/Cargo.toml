@@ -18,11 +18,12 @@ anyhow = { version = "1.0", optional = true }
 config = { version = "0.14.0", optional = true }
 futures = { version = "0.3", optional = true }
 cfg-if = { version = "1.0.0", optional = true }
-keccak-hash = { version = "0.10.0", optional = true }
 once_cell = { version = "1", optional = true }
-opentelemetry = { version = "0.24.0", optional = true }
+opentelemetry = { version = "0.24.0"}
+opentelemetry-otlp = { version = "0.17", features = ["tls", "tls-roots"] }
+opentelemetry_sdk = { version = "0.24", features = ["rt-tokio", "trace"] }
+opentelemetry-semantic-conventions = "0.16.0"
 prometheus = { version = "0.13", optional = true }
-reqwest = { version = "0.12", features = ["json"], optional = true }
 serde = { version = "1.0", features = ["derive"], optional = true }
 serde_json = {version = "1", optional = true }
 tokio = { version = "1.40", optional = true }
@@ -41,7 +42,6 @@ sea-orm-migration-0_12 = { package = "sea-orm-migration", version = "0.12.2", op
 
 [dev-dependencies]
 pretty_assertions = "1.4.0"
-tempfile = "3.10.1"
 regex = { version = "1", features = ["std"], default-features = false }
 
 
@@ -64,7 +64,6 @@ launcher = [
 ]
 tracing = [
     "dep:anyhow",
-    "dep:opentelemetry",
     "dep:serde",
     "dep:serde_json",
     "dep:tracing",

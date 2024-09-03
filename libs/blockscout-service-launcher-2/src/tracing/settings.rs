@@ -24,3 +24,22 @@ impl Default for TracingSettings {
         }
     }
 }
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(default, deny_unknown_fields)]
+pub struct OTLPSettings {
+    pub enabled: bool,
+    #[serde(default)]
+    pub service_name: String,
+    pub agent_endpoint: String,
+}
+
+impl Default for OTLPSettings {
+    fn default() -> Self {
+        Self {
+            enabled: true,
+            service_name: "raas-blockscout-stat".to_string(),
+            agent_endpoint: "127.0.0.1:6831".to_string(),
+        }
+    }
+}

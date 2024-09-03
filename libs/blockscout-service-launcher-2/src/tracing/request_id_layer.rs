@@ -233,7 +233,7 @@ mod tests {
                     r#"{
                     "timestamp":"fake time",
                     "message":"enter",
-                    "target":"blockscout_service_launcher::tracing::request_id_layer::tests",
+                    "target":"blockscout_service_launcher_2::tracing::request_id_layer::tests",
                     "span":{
                         "request_id":"02f09a3f-1624-3b1d-8409-44eff7708208",
                         "name":"span0_with_request_id"
@@ -250,7 +250,7 @@ mod tests {
                     r#"{
                     "timestamp":"fake time",
                     "message":"enter",
-                    "target":"blockscout_service_launcher::tracing::request_id_layer::tests",
+                    "target":"blockscout_service_launcher_2::tracing::request_id_layer::tests",
                     "span":{
                         "request_id":"02f09a3f-1624-3b1d-8409-44eff7708208",
                         "x":42,

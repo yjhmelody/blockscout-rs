@@ -11,7 +11,7 @@ use std::{
     time::Instant,
 };
 use tracing::{Id, Span};
-use tracing_actix_web::root_span;
+use tracing_actix_web::{DefaultRootSpanBuilder, root_span};
 
 static REQUEST_TIMINGS: Lazy<Mutex<HashMap<Id, Instant>>> =
     Lazy::new(|| Mutex::new(HashMap::new()));
@@ -19,11 +19,16 @@ static REQUEST_TIMINGS: Lazy<Mutex<HashMap<Id, Instant>>> =
 static SKIP_HTTP_TRACE_PATHS: Lazy<RwLock<HashSet<String>>> =
     Lazy::new(|| RwLock::new(HashSet::new()));
 
-#[derive(Default)]
 pub struct CompactRootSpanBuilder;
 
 impl CompactRootSpanBuilder {
-    pub fn init_skip_http_trace_paths<S: Into<String>>(
+    /// Enable to create span for all paths.
+    pub fn all_paths() {
+        *SKIP_HTTP_TRACE_PATHS.write().unwrap() = HashSet::new()
+    }
+
+    /// Skip to create span for some paths.
+    pub fn skip_paths<S: Into<String>>(
         skip_http_trace_paths: impl IntoIterator<Item = S>,
     ) {
         *SKIP_HTTP_TRACE_PATHS.write().unwrap() = skip_http_trace_paths
@@ -70,31 +75,6 @@ impl tracing_actix_web::RootSpanBuilder for CompactRootSpanBuilder {
             }
         }
 
-        match &outcome {
-            Ok(response) => {
-                if let Some(error) = response.response().error() {
-                    // use the status code already constructed for the outgoing HTTP response
-                    handle_error(span, response.status(), error.as_response_error());
-                } else {
-                    let code: i32 = response.response().status().as_u16().into();
-                    span.record("http.status_code", code);
-                }
-            }
-            Err(error) => {
-                let response_error = error.as_response_error();
-                handle_error(span, response_error.status_code(), response_error);
-            }
-        };
+        DefaultRootSpanBuilder::on_request_end(span, outcome)
     }
-}
-
-fn handle_error(span: Span, status_code: StatusCode, response_error: &dyn ResponseError) {
-    // pre-formatting errors is a workaround for https://github.com/tokio-rs/tracing/issues/1565
-    let display = format!("{response_error}");
-    let debug = format!("{response_error:?}");
-    span.record("exception.message", tracing::field::display(display));
-    span.record("exception.details", tracing::field::display(debug));
-    let code: i32 = status_code.as_u16().into();
-
-    span.record("http.status_code", code);
 }
